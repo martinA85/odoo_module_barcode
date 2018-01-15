@@ -10,6 +10,7 @@ from PIL import Image
 class ProductTemplate(models.Model):
 
     _inherit = "product.template"
+    #new field to stock barcode image
     barcode_image = fields.Binary("Code-barre", attachment=True, help="Image du code-barre")
     
     @api.depends('barcode')
@@ -20,27 +21,38 @@ class ProductTemplate(models.Model):
             barcode_image = record.barcode_image
             
             barcode_odoo = record.barcode
+            #generating barcode
             ean = barcode.get('ean13', barcode_odoo, writer=ImageWriter())
+            #saving barcode as png image
             filename = ean.save('ean13')
             
+            #openning image
             f = open("ean13.png")
+            #converting image for odoo
             filename = base64.encodestring(f.read())
             f.close()
             
+            #updating record barcode_image
             record.barcode_image = filename
 
     @api.depends('barcode')
     def generate_bacode(self):
         ptmp = self.env['product.template']
+        #we are collecting all product with flags 2 barcode, sorted by barcode
         products = ptmp.search([('barcode','=ilike','2%')]).sorted(key=lambda r: r.barcode)
         last = len(products)-1
+        #we just want the last one, we don't want the last number that is the security code
         lastBarcode = products[last].barcode[0:-1]
         
         for record in self:
+            #incrementing the barcode
             newBarcode = str(int(lastBarcode) + 1)
             record.barcode = newBarcode
+            #calling the function that generate the security number
             secure = self._calc_security_code()
+            #adding security number to barcode
             record.barcode += str(secure)
+            #updating image
             self._generate_bacode_image()
             
     @api.depends('barcode')
