@@ -22,9 +22,9 @@ class ProductTemplate(models.Model):
             
             barcode_odoo = record.barcode
             #generating barcode
-            ean = barcode.get('ean13', barcode_odoo, writer=ImageWriter("/odoo_module_barcode/"))
+            ean = barcode.get('ean13', barcode_odoo, writer=ImageWriter())
             #saving barcode as png image
-            filename = ean.save('ean13')
+            filename = ean.save('ean13', "/odoo_module_barcode/")
             
             #openning image
             f = open("ean13.png")
