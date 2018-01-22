@@ -9,6 +9,7 @@ from PIL import Image
 class ProductTemplate(models.Model):
 
     _inherit = "product.template"
+
     #new field to stock barcode image
     barcode_image = fields.Binary("Code-barre", attachment=True, help="Image du code-barre")
     
