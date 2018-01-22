@@ -9,7 +9,6 @@
                 <xpath expr="//page[@name='sales']" position="after">
                     <page name="barcode" string="Code Barre">
                         <group>
-                            <field name="barcode_image" widget="image" string="Code-barre"/>
                         </group>
                     </page>
                 </xpath>
