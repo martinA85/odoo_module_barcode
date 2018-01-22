@@ -28,6 +28,8 @@ class ProductTemplate(models.Model):
             
             #openning image
             f = open("ean13.png")
+            test = open(filename)
+            print(f)
             #converting image for odoo
             filename = base64.encodestring(f.read())
             f.close()
