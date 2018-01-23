@@ -27,8 +27,6 @@ class ProductTemplate(models.Model):
             secure = self._calc_security_code()
             #adding security number to barcode
             record.barcode += str(secure)
-            #updating image
-            self._generate_bacode_image()
             
     @api.depends('barcode')
     def _calc_security_code(self):
