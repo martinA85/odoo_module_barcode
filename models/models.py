@@ -14,7 +14,6 @@ class ProductTemplate(models.Model):
     barcode_image = fields.Binary("Code-barre", attachment=True, help="Image du code-barre")
     
     @api.depends('barcode')
-    @api.onchange('barcode')
     def _generate_bacode_image(self):
         for record in self:
             
