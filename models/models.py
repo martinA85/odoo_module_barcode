@@ -9,31 +9,7 @@ from PIL import Image
 class ProductTemplate(models.Model):
 
     _inherit = "product.template"
-
-    #new field to stock barcode image
-    barcode_image = fields.Binary("Code-barre", attachment=True, help="Image du code-barre")
     
-    @api.depends('barcode')
-    def _generate_bacode_image(self):
-        for record in self:
-            
-            barcode_image = record.barcode_image
-            
-            barcode_odoo = record.barcode
-            #generating barcode
-            ean = barcode.get('ean13', barcode_odoo, writer=ImageWriter())
-            #saving barcode as png image
-            filename = ean.save('ean13')
-            
-            #openning image
-            f = open("ean13.png")
-            #converting image for odoo
-            filename = base64.encodestring(f.read())
-            f.close()
-            
-            #updating record barcode_image
-            record.barcode_image = filename
-
     @api.depends('barcode')
     def generate_bacode(self):
         ptmp = self.env['product.template']
